@@ -1,0 +1,101 @@
+---
+title: Scatter Plots in R with `ggplot2`
+subtitle: Cheatsheet
+date: today
+---
+
+```{r setup}
+#| include: false
+library(ggplot2)
+library(dplyr)
+```
+
+> This work is licensed under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
+
+## About {-}
+
+A scatter plot is a data visualization that shows the relationship between **two continuous variables**. It is useful for identifying patterns and outliers. For more than two continuous variables, it may be possible to use colour, size, or shape to represent additional variables, but this can make the plot harder to interpret.
+
+
+::: {.callout-note collapse="true"}
+## Assumed knowledge
+- You know how to install and load packages in R.
+- You know how to import data into R.
+- You recognise data frames and vectors.
+:::
+
+::: {.callout-tip collapse="true"}
+## Data structure
+
+Your data should be **structured** in a way that makes it *easy* to plot. The ideal structure is **long**, i.e. one where each column represents a variable and each row an observation (@fig-longwide). You can either reshape your data in R or **move cells manually** in a spreadsheet program to achieve the desired structure. For boxplots comparing more than one group of data, a **categorical variable** representing the group should be present in the data.
+
+![Long data (left) where each column is a different variable -- e.g. `Sex` is categorical and `BW` is the measured, continuous response -- is preferred over wide data (right), as it makes it easier to manipulate data when plotting.](longwide.png){#fig-longwide}
+:::
+
+## Data
+
+For this cheatsheet we will use part of the possums dataset used in [BIOL2022](https://www.sydney.edu.au/units/BIOL2022) labs. Two numerical variables are available: `ExpBLUP` and `AactiveTBLUP`. The data is available in the file `possums-blup.csv`.
+
+{{< downloadthis possums-blup.csv dname="possums-blup" label="possums-blup.csv" type="primary" >}}
+
+## Import data
+```{r}
+#| message: false
+library(readr) # load the readr package
+possums_blup <- read_csv("possums-blup.csv") # read the data, store it in an object called possums_blup
+```
+
+
+## Plot
+Use the different plots below to learn how to customise your scatterplot.
+
+::: panel-tabset
+
+## Version 1
+
+```{r}
+library(ggplot2) # <1>
+ggplot(possums_blup, aes(x = ExpBLUP, y = AactiveTBLUP)) + # <2>
+  geom_point() + # <3>
+  geom_smooth(method = "lm", formula = "y ~ x") # <4>
+```
+1. Load the `ggplot2` package.
+2. Create a scatter plot with `ExpBLUP` on the x-axis and `AactiveTBLUP` on the y-axis. 
+3. Add a layer for data points.
+4. Add a layer for the linear regression line, defining the method (`lm`) and the formula (`y ~ x`).
+
+
+## Version 2
+
+```{r}
+library(ggplot2)
+ggplot(possums_blup) +
+  aes(x = ExpBLUP, y = AactiveTBLUP) + # <1>
+  geom_point() +
+  geom_smooth(method = "lm") + # <2>
+  xlab("ExpBLUP") + # <3>
+  ylab("AactiveTBLUP") +
+  theme_classic() # <4>
+```
+1. Define the aesthetics (x and y variables), outside of the `ggplot()` function.
+2. For the linear regression line, you can omit the formula.
+3. Add labels for the x and y axes.
+4. Change the theme. This is a simple way to standardise the appearance of your plots.
+
+
+## Version 3
+
+```{r}
+library(ggplot2)
+ggplot(possums_blup) +
+  aes(x = ExpBLUP, y = AactiveTBLUP) +
+  geom_point(
+    colour = "firebrick",  # <1>
+    alpha = .5, size = 3) + # <2>
+  geom_smooth(method = "lm", se = FALSE) + # <3>
+  theme_classic()
+```
+1. Change the colour of the points.
+2. Change the transparency (`alpha`) and size of the points.
+3. Remove the confidence interval band from the linear regression line.
+:::

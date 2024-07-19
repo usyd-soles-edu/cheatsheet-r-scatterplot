@@ -1,0 +1,17 @@
+{
+  "hash": "a5bb8efbee7fee0e98e13871f05ef1ec",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: Scatter Plots in R with `ggplot2`\nsubtitle: Cheatsheet\ndate: today\n---\n\n\n\n\n\n\n> This work is licensed under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).\n\n## About {.unnumbered}\n\nA scatter plot is a data visualization that shows the relationship between **two continuous variables**. It is useful for identifying patterns and outliers. For more than two continuous variables, it may be possible to use colour, size, or shape to represent additional variables, but this can make the plot harder to interpret.\n\n\n::: {.callout-note collapse=\"true\"}\n## Assumed knowledge\n- You know how to install and load packages in R.\n- You know how to import data into R.\n- You recognise data frames and vectors.\n:::\n\n::: {.callout-tip collapse=\"true\"}\n## Data structure\n\nYour data should be **structured** in a way that makes it *easy* to plot. The ideal structure is **long**, i.e. one where each column represents a variable and each row an observation (@fig-longwide). You can either reshape your data in R or **move cells manually** in a spreadsheet program to achieve the desired structure. For boxplots comparing more than one group of data, a **categorical variable** representing the group should be present in the data.\n\n![Long data (left) where each column is a different variable -- e.g. `Sex` is categorical and `BW` is the measured, continuous response -- is preferred over wide data (right), as it makes it easier to manipulate data when plotting.](longwide.png){#fig-longwide}\n:::\n\n## Data\n\nFor this cheatsheet we will use part of the possums dataset used in [BIOL2022](https://www.sydney.edu.au/units/BIOL2022) labs. Two numerical variables are available: `ExpBLUP` and `AactiveTBLUP`. The data is available in the file `possums-blup.csv`.\n\n\n\n\n{{< downloadthis possums-blup.csv dname=\"possums-blup\" label=\"possums-blup.csv\" type=\"primary\" >}}\n\n\n\n\n\n\n## Import data\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(readr) # load the readr package\npossums_blup <- read_csv(\"possums-blup.csv\") # read the data, store it in an object called possums_blup\n```\n:::\n\n\n\n\n\n## Plot\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(ggplot2)\nlibrary(dplyr)\npossums_blup |>\n  select(ExpBLUP, AactiveTBLUP) |>\n  ggplot(aes(x = ExpBLUP, y = AactiveTBLUP)) +\n    geom_point() +\n    geom_smooth(method = \"lm\", formula = \"y ~ x\") \n```\n\n::: {.cell-output-display}\n![](scatter_r_files/figure-typst/unnamed-chunk-2-1.svg)\n:::\n:::\n",
+    "supporting": [
+      "scatter_r_files/figure-typst"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": null,
+    "postProcess": false
+  }
+}
